@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Meow Notes</title>
+  </head>
+  <body>
+
+    <h2>Meow-notes</h2>
+
+    <div id="notes__container">
+      
+    </div>
+    
+    <script>
+
+     
+      function loadAllNotes (){
+        const xhr = new XMLHttpRequest();
+
+        let url = 'http://localhost:3180/notes';
+        xhr.open("GET", url, true);
+
+        xhr.onload = () => {
+          if (xhr.readyState === xhr.DONE) {
+            if (xhr.status === 200) {
+
+              const notesContainer = document.getElementById('notes__container');
+              let data = JSON.parse(xhr.responseText);
+              let output = '';
+              
+              for(let note of data){
+                output += `
+                  <div class="notes__card">
+                    <h3><span>${note.id}.</span> ${note.title}</h3>
+                    <p> ${note.contents}</p>
+                  </div>
+                `;
+              }
+
+              notesContainer.innerHTML = output;
+
+            }
+          }
+        };
+
+        xhr.send();
+      }
+      
+      loadAllNotes();
+    </script>
+    
+  </body>
+</html>
